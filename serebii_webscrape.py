@@ -12,6 +12,7 @@ import re
 today = datetime.today().strftime('%Y%m%d%H%M%S')
 OUTPUT_FILE = ('pokemon_scrape_%s.json' % today)
 
+# TODO Generate an array for all pokemon in the galarian pokedex that is currently available
 def getPokemon():
     pokemonList = []
 
@@ -29,8 +30,9 @@ def getPokemon():
     for td in pokemonName:
         # column = td.find_all('br')
         print(td)
-    # pokemonList.append(pokemonName[2].text.replace('[^a-zA-Z]+', ''))
+        # pokemonList.append(pokemonName[2].text.replace('[^a-zA-Z]+', ''))
     # print(pokemonName)
+    # print(pokemonList)
 
 def getData(urlArray):
     try:
@@ -41,6 +43,10 @@ def getData(urlArray):
             page = data.content
             soup = BeautifulSoup(page, 'html.parser')
 
+            # Skip if pokemon not available
+            if (data.status_code != "200"):
+                break;
+
             try:
                 pokemonHeader = soup.find_all('td', attrs={'class': 'fooinfo'})
 
@@ -49,19 +55,23 @@ def getData(urlArray):
                 pokemonTypeTr = pokemonTypeTd.find_all('tr')
 
                 # Alternative forms e.g Normal, Alolan, Galarian
-                if (len(pokemonTypeTr) >= 2):
-                    # pokemonTypeTd = pokemonTypeTr.find_all('td')
-                    pokemonType = {}
+                pokemonTypeForm = {}
+                pokemonTypes = []
+                pokemonTypeList = []
 
-                    for type in pokemonTypeTr:
-                        pokemonType['form'] = type.find_all('td')[0].text
-                        pokemonType['type'] = type.find_all('alt')
-                        print(pokemonType)
-                else:
-                    print('hi....')
+                # TODO Fix the bullshit nested loop to properly display the correct form and type
+                for form in pokemonTypeTr:
+                    pokemonTypeForm['form'] = form.find_all('td')[0].text
+                    for type in form.find_all('img', alt=True):
+                        pokemonTypes.append(type.get('alt', '').replace('-type', '').lower())
+                        pokemonTypeForm['type'] = pokemonTypes
+                    # print(pokemonTypeForm)
+                    pokemonTypes = []
+                    pokemonTypeList.append(pokemonTypeForm)
+                    print(pokemonTypeList)
 
                 pokemonTypeImg = pokemonTypeTd.find_all('img')
-
+                # TODO Weakness and Resistances based on the alternative forms and types
                 # Weaknesses and Resistances
                 # pokemonTypingTable = soup.find_all('table', attrs={'class': 'dextable', 'style': '@media (max-width:1011px) {display:none;}'})
                 # pokemonTypingTr = pokemonTypingTable.find_all('tr')
@@ -75,10 +85,10 @@ def getData(urlArray):
                 print('Beautiful Soup scraping data error')
                 raise ex
 
-            pokemonTypeList = []
-            for type in pokemonTypeImg:
-                if type.get('alt', '').replace('-type', '').lower() not in pokemonTypeList:
-                    pokemonTypeList.append(type.get('alt', '').replace('-type', '').lower())
+            # pokemonTypeList = []
+            # for type in pokemonTypeImg:
+            #     if type.get('alt', '').replace('-type', '').lower() not in pokemonTypeList:
+            #         pokemonTypeList.append(type.get('alt', '').replace('-type', '').lower())
 
             pokemon = {}
 
@@ -93,8 +103,8 @@ def getData(urlArray):
             pokemon['stepsToHatchEgg'] = pokemonHeader[9].text
 
             # Pokemon typing weaknesses and resistances
-            pokemon['resistance'] = []
-            pokemon['weakness'] = []
+            # pokemon['resistance'] = []
+            # pokemon['weakness'] = []
 
             # Pokemon National, Galarian, Isle of Armor DLC Dex
             pokemonDexList = pokemonHeader[3].text
@@ -102,7 +112,8 @@ def getData(urlArray):
             pokemon['galarNumber'] = re.search('Galar: #[0-9]{3}|[-]{3}|[Foreign]{7}', pokemonDexList).group(0).replace('Foreign', '---').replace('Galar: #', '')
             pokemon['isleNumber'] = re.search('Isle of Armor: #[0-9]{3}|[-]{3}', pokemonDexList).group(0).replace('Isle of Armor: #', '')
 
-            # Hacky way to get pokemon base stats based on Gigantamax and multiple forms
+            # TODO Fix base stats based on alternative forms
+            # Hacky way to get pokemon base stats based on Gigantamax and multiple form
             try:
                 # Gigantamax
                 if 'Picture' in serebiiLastTd:
@@ -128,8 +139,8 @@ def getData(urlArray):
 
             pokemonDetailList.append(pokemon)
 
-        #print(pokemonDetailList)
-        #saveData(pokemonDetailList)
+        # print(pokemonDetailList)
+        # saveData(pokemonDetailList)
     except Exception as ex:
         print('Error caught {0} for URL - {1}\n'.format(ex, url))
         raise ex
@@ -141,7 +152,7 @@ def saveData(pokemonList):
 if __name__ == '__main__':
     try:
         # getPokemon()
-        pokemonList = ['meowth'] #, 'slowpoke', 'zacian', 'venusaur'] #, 'thwackey', 'rillaboom'] #, 'zacian', 'zamazenta']
+        pokemonList = ['zacian'] #, 'slowpoke', 'zacian', 'venusaur'] #, 'thwackey', 'rillaboom'] #, 'zacian', 'zamazenta']
         urlList = ['https://www.serebii.net/pokedex-swsh/{}/'.format(pokemonList[p])
             for p in range(len(pokemonList))]
 
