@@ -22,14 +22,22 @@ def getPokemon():
 
     try:
         pokemonName = soup.find_all('td', attrs={'align': 'center', 'class': 'fooinfo'})
-        # pokemonHref = pokemonName.find('a')
     except Exception as ex:
         print('Beautiful Soup scraping pokemon array error')
         raise ex
 
-    for td in pokemonName:
+    pokemonNameLength = len(pokemonName)
+    for i in range(2, pokemonNameLength, 11):
+        print(pokemonName[i])
+
+    # print(pokemonName[2])
+    # print(pokemonName[13])
+    # print(pokemonName[24])
+    # print(pokemonName[35])
+
+    # for td in pokemonName:
         # column = td.find_all('br')
-        print(td)
+        # print(td)
         # pokemonList.append(pokemonName[2].text.replace('[^a-zA-Z]+', ''))
     # print(pokemonName)
     # print(pokemonList)
@@ -151,12 +159,12 @@ def saveData(pokemonList):
 
 if __name__ == '__main__':
     try:
-        # getPokemon()
-        pokemonList = ['zacian'] #, 'slowpoke', 'zacian', 'venusaur'] #, 'thwackey', 'rillaboom'] #, 'zacian', 'zamazenta']
-        urlList = ['https://www.serebii.net/pokedex-swsh/{}/'.format(pokemonList[p])
-            for p in range(len(pokemonList))]
+        getPokemon()
+        # pokemonList = ['zacian'] #, 'slowpoke', 'zacian', 'venusaur'] #, 'thwackey', 'rillaboom'] #, 'zacian', 'zamazenta']
+        # urlList = ['https://www.serebii.net/pokedex-swsh/{}/'.format(pokemonList[p])
+        #     for p in range(len(pokemonList))]
 
-        getData(urlList)
+        # getData(urlList)
     except Exception as ex:
         print('Error caught during main')
         raise ex

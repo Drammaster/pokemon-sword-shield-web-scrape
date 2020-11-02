@@ -1,0 +1,40 @@
+[
+  {
+    "name": "Zacian",
+    "description": "Warrior Pok\u00e9mon",
+    "type": [
+      {
+        "form": "Crowned Sword",
+        "type": [
+          "fairy",
+          "steel"
+        ]
+      },
+      {
+        "form": "Crowned Sword",
+        "type": [
+          "fairy",
+          "steel"
+        ]
+      }
+    ],
+    "ability": "Intrepid Sword: Boosts the Pok\u00e9mon's Attack stat when the Pok\u00e9mon enters a battle.",
+    "height": "9'02\"\n2.8m",
+    "weight": "242.5lbs\n110.0kg",
+    "captureRate": "10",
+    "stepsToHatchEgg": "30,720",
+    "resistance": [],
+    "weakness": [],
+    "nationalNumber": "888",
+    "galarNumber": "398",
+    "isleNumber": "---",
+    "hp": "92",
+    "attack": "170",
+    "defence": "115",
+    "spattack": "80",
+    "spdefence": "115",
+    "speed": "148",
+    "dynamax": false,
+    "gigantamax": false
+  }
+]
