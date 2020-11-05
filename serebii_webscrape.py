@@ -28,19 +28,9 @@ def getPokemon():
 
     pokemonNameLength = len(pokemonName)
     for i in range(2, pokemonNameLength, 11):
-        print(pokemonName[i])
+        pokemonList.append(pokemonName[i].find('a').contents[0].strip())
 
-    # print(pokemonName[2])
-    # print(pokemonName[13])
-    # print(pokemonName[24])
-    # print(pokemonName[35])
-
-    # for td in pokemonName:
-        # column = td.find_all('br')
-        # print(td)
-        # pokemonList.append(pokemonName[2].text.replace('[^a-zA-Z]+', ''))
-    # print(pokemonName)
-    # print(pokemonList)
+    print(pokemonList)
 
 def getData(urlArray):
     try:
