@@ -76,8 +76,7 @@ def getData(urlList):
                 pokemonDictionaryCopy = pokemonForm.copy()
                 pokemonTypeList.append(pokemonDictionaryCopy)
 
-            # pokemonTypeImg = pokemonTypeTd.find_all('img')
-            # TODO Weakness and Resistances based on the alternative forms and types
+            # TODO - Weakness and Resistances based on the alternative forms and types
             # Weaknesses and Resistances
             # pokemonTypingTable = soup.find_all('table', attrs={'class': 'dextable', 'style': '@media (max-width:1011px) {display:none;}'})
             # pokemonTypingTr = pokemonTypingTable.find_all('tr')
@@ -113,7 +112,6 @@ def getData(urlList):
         pokemon['galarNumber'] = re.search('Galar: #[0-9]{3}|[-]{3}|[Foreign]{7}', pokemonDexList).group(0).replace('Foreign', '---').replace('Galar: #', '')
         pokemon['isleNumber'] = re.search('Isle of Armor: #[0-9]{3}|[-]{3}', pokemonDexList).group(0).replace('Isle of Armor: #', '')
 
-        # TODO Fix base stats based on alternative forms
         # Hacky way to get pokemon base stats based on Gigantamax and multiple form
         try:
             # Gigantamax
@@ -133,6 +131,8 @@ def getData(urlList):
         pokemon['spattack'] = pokemonBaseStats[3].text
         pokemon['spdefence'] = pokemonBaseStats[4].text
         pokemon['speed'] = pokemonBaseStats[5].text
+
+        # TODO - Get Alternate form stats
 
         # Pokemon Sword and Shield battle mechanic
         pokemon['dynamax'] = 'cannot' not in pokemonHeader[14].text
