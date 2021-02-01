@@ -1,3 +1,5 @@
 {
-    "python.pythonPath": "/Users/michael/.pyenv/versions/3.8.3/bin/python"
+    "python.pythonPath": "/Users/michael/.pyenv/versions/3.8.3/bin/python",
+    "terminal.integrated.shell.osx": "/bin/zsh",
+    "terminal.integrated.fontFamily": "MesloLGS NF"
 }
