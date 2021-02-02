@@ -39,25 +39,27 @@ def getPokemon():
         pokemonNameLength = len(pokemonName)
 
         for hyperlink in range(2, pokemonNameLength, 11):
-            pokemonList.append(pokemonName[hyperlink].find('a').contents[0].strip())
+            pokemonList.append(pokemonName[hyperlink].find('a').contents[0].strip().lower())
 
     afterExtractionTime = datetime.now()
     timeTaken = afterExtractionTime - beforeExtractionTime
     print('Time taken to extract all pokemon names: {0}s'.format(timeTaken.seconds))
+
+    return pokemonList
 
 def getData(urlList):
 
     pokemonDetailList = []
 
     for url in urlList:
-        data = requests.get(url);
+        data = requests.get(url)
         page = data.content
         soup = BeautifulSoup(page, 'html.parser')
 
         # Skip if pokemon not available
         if (data.status_code != 200):
             print('Serebii is currently down.')
-            break;
+            break
 
         try:
             pokemonHeader = soup.find_all('td', attrs={'class': 'fooinfo'})
@@ -82,6 +84,7 @@ def getData(urlList):
             # pokemonTypingTr = pokemonTypingTable.find_all('tr')
             # pokemonTypingTd = pokemonTypingTable.find_next_siblings('td', attrs={'class': 'footype'})
 
+            # TODO - Retrieve alternate form base stats
             # Base stats
             serebiiLastTd = soup.find_all('td', attrs={'class': 'fooevo', 'colspan': '4'})[-1]
 
@@ -140,8 +143,8 @@ def getData(urlList):
 
         pokemonDetailList.append(pokemon)
 
-    print(pokemonDetailList)
-    # saveData(pokemonDetailList)
+    # print(pokemonDetailList)
+    saveData(pokemonDetailList)
 
 def saveData(pokemonList):
     with open(OUTPUT_FILE, 'a') as output_file:
@@ -149,8 +152,8 @@ def saveData(pokemonList):
 
 if __name__ == '__main__':
     try:
-        # getPokemon()
-        pokemonList = ['zacian'] #, 'slowpoke', 'zacian', 'venusaur'] #, 'thwackey', 'rillaboom'] #, 'zacian', 'zamazenta']
+        # print(getPokemon())
+        pokemonList = ['zacian'] #['type:null', 'slowpoke', 'zacian', 'venusaur', 'thwackey', 'rillaboom', 'zamazenta'] #, 'zacian', 'zamazenta']
         urlList = ['https://www.serebii.net/pokedex-swsh/{}/'.format(pokemonList[pokemon])
             for pokemon in range(len(pokemonList))]
 
